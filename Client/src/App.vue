@@ -2,7 +2,11 @@
 </script>
 
 <template>
-  <h1>hello</h1>
+  <router-view/>
 </template>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+h1 {
+  color: orange;
+}
+</style>
