@@ -1,4 +1,12 @@
 <script setup lang="ts">
+import {provide, reactive} from "vue";
+
+let state = reactive({
+  message: "Hello, Vue!",
+});
+
+provide("state", state);
+
 </script>
 
 <template>
