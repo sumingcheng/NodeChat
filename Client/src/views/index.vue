@@ -1,21 +1,46 @@
 <template>
   <div class="main">
-    <div class="left">
-      <UserList/>
-    </div>
-    <div class="right">
-      <div class="content">
-        <!--        <div class="trademark"></div>-->
-        <div class="message">
-          <MessageList/>
+    <div class="top">
+      <div class="left">
+        <UserList/>
+      </div>
+      <div class="right">
+        <div class="content">
+          <!--        <div class="trademark"></div>-->
+          <div class="message">
+            <MessageList/>
+            <MessageList/>
+            <MessageList/>
+            <MessageList/>
+            <MessageList/>
+            <MessageList/>
+            <MessageList/>
+            <MessageList/>
+            <MessageList/>
+            <MessageList/>
+            <MessageList/>
+            <MessageList/>
+            <MessageList/>
+            <MessageList/>
+            <MessageList/>
+            <MessageList/>
+            <MessageList/>
+            <MessageList/>
+            <MessageList/>
+            <MessageList/>
+            <MessageList/>
+            <MessageList/>
+            <MessageList/>
+            <MessageList/>
+          </div>
         </div>
       </div>
-      <div class="chat">
-        <!--        <div class="tools">-->
-        <!--          <div>emoji</div>-->
-        <!--        </div>-->
-        <textarea class="chat-input" placeholder="pleaseEnterContent"/>
-      </div>
+    </div>
+    <div class="chat">
+      <!--        <div class="tools">-->
+      <!--          <div>emoji</div>-->
+      <!--        </div>-->
+      <textarea class="chat-input" placeholder="pleaseEnterContent"/>
     </div>
   </div>
 </template>
