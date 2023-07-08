@@ -12,7 +12,7 @@ const app = express();
 const server = http.createServer(app);
 const options = {
   cors: {
-    origin: 'http://127.0.0.1:20007',
+    origin: '*',
     methods: ['GET', 'POST'],
     allowedHeaders: ['my-custom-header'],
     credentials: true
