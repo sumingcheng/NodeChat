@@ -1,8 +1,8 @@
 const express = require('express');
 const http = require('http');
 const socketIO = require('socket.io');
-const Docenv = require('dotenv')
-Docenv.config();
+const Dotenv = require('dotenv')
+Dotenv.config();
 
 const PORT = process.env.PORT
 
@@ -27,11 +27,14 @@ io.on('connection', function (socket) {
   console.log('用户已连接: ' + socket.id);
 
   // 当客户端发送 "chat message" 事件时，执行以下回调函数
-  socket.on('chat message', function (msg) {
-    console.log('消息: ' + msg);
+  socket.on('ServerMessage', function (msgObj) {
+    console.log(`消息: ${msgObj.message} 用户名: ${msgObj.username} 用户ID: ${socket.id} 消息类型: ${msgObj.type}`);
 
-    // 将 "chat message" 事件广播给所有客户端，包括发送这个事件的客户端
-    io.emit('聊天消息', msg);
+    // 为消息对象添加一个时间戳
+    msgObj.timestamp = Date.now();
+    msgObj.id = socket.id
+    // 将 "Client" 事件广播给所有客户端，包括发送这个事件的客户端
+    io.emit('Client', msgObj);
   });
 
   // 当客户端断开连接时，执行以下回调函数
@@ -42,5 +45,5 @@ io.on('connection', function (socket) {
 
 // 启动服务器，监听 3000 端口
 server.listen(PORT, function () {
-  console.log(`服务运行在 *:${PORT} 端口`);
+  console.log(`服务运行在 http://localhost:${PORT} 端口`);
 });

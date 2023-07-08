@@ -1,29 +1,40 @@
 <template>
-  <div class="main">
-    <div class="msg">
-      <span>2023年7月7日 17:15:52</span>
-    </div>
-    <div class="content">
-      <span>用户1：</span>
-      <span>这是一段文字</span>
+  <div class="List">
+    <div v-for="item in MsgList" :key="item.id">
+      <div class="msg">
+        <span>{{ time(item.timestamp) }}</span>
+      </div>
+      <div class="content">
+        <span>{{ item.username }}:</span>
+        <span>{{ item.message }}</span>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import {defineComponent} from 'vue'
+import dayjs from 'dayjs'
+
+defineProps({
+  MsgList: {
+    type: Array<any>,
+    default: () => [],
+  },
+})
 
 defineComponent({
   name: 'messageList',
-  props: {
-    MessageData: Object
-  }
 })
+
+const time = (val: number | string) => {
+  return dayjs(val).format('YYYY-MM-DD HH:mm:ss');
+}
 
 </script>
 
 <style lang="less" scoped>
-.main {
+.List {
   .msg {
     margin: 4px 0;
 

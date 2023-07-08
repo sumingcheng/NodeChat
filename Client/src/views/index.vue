@@ -8,30 +8,7 @@
         <div class="content">
           <!--        <div class="trademark"></div>-->
           <div class="message">
-            <MessageList/>
-            <MessageList/>
-            <MessageList/>
-            <MessageList/>
-            <MessageList/>
-            <MessageList/>
-            <MessageList/>
-            <MessageList/>
-            <MessageList/>
-            <MessageList/>
-            <MessageList/>
-            <MessageList/>
-            <MessageList/>
-            <MessageList/>
-            <MessageList/>
-            <MessageList/>
-            <MessageList/>
-            <MessageList/>
-            <MessageList/>
-            <MessageList/>
-            <MessageList/>
-            <MessageList/>
-            <MessageList/>
-            <MessageList/>
+            <MessageList :MsgList="MsgList"/>
           </div>
         </div>
       </div>
@@ -40,27 +17,29 @@
       <!--        <div class="tools">-->
       <!--          <div>emoji</div>-->
       <!--        </div>-->
-      <textarea class="chat-input" placeholder="pleaseEnterContent" v-model="text" @keydown.enter="toMsg"/>
+      <textarea class="chat-input" placeholder="pleaseEnterContent" v-model="ClientData.message"
+                @keydown.enter="toMsg"/>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-// socket
-import {inject, onMounted, onUnmounted, ref} from "vue"
+// Socket
+import {onMounted, onUnmounted, reactive, ref} from "vue"
 import MessageList from "@/components/messageList/index.vue"
 import UserList from "@/components/userList/index.vue"
-import {io, Socket} from 'socket.io-client'
-// global
-const state = inject<any>("state")
-console.log(state)
-const text = ref<any>('');
+import {io, Socket} from 'Socket.io-client'
+
+const MsgList = reactive<Array<any>>([]);
+const ClientData = ref<any>({});
 const socket = ref<Socket | null>(null)
 
 const toMsg = () => {
-  if (text.value) {
-    socket.value?.emit('chat message', text.value)
-    text.value = ''
+  ClientData.value.username = 'smc'
+  if (ClientData.value.message) {
+    socket.value?.emit('ServerMessage', ClientData.value)
+    // 清空 ClientData 对象
+    ClientData.value.message = ""
   }
 }
 
@@ -68,12 +47,12 @@ onMounted(() => {
   socket.value = io('http://localhost:33445')
 
   socket.value?.on('connect', () => {
-    console.log('Connected to the server')
+    console.log('已连接到服务器')
   })
 
-  socket.value?.on('chat message', (msg: string) => {
-    console.log('Received a message: ' + msg)
-  })
+  socket.value?.on('Client', (msgObj: object) => {
+    MsgList.push(msgObj)
+  });
 })
 
 onUnmounted(() => {
