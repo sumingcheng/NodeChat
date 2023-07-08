@@ -68,7 +68,7 @@ const scrollToBottom = () => {
 }
 
 onMounted(() => {
-  socket.value = io('http://localhost:33445')
+  socket.value = io('http://127.0.0.1:33445')
   socket.value?.on('connect', () => {
     console.log('已连接到服务器')
   })
