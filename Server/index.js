@@ -24,23 +24,23 @@ const io = socketIO(server, options);
 
 // 当有新的客户端连接时，执行以下回调函数
 io.on('connection', function (socket) {
-  console.log('A user connected: ' + socket.id);
+  console.log('用户已连接: ' + socket.id);
 
   // 当客户端发送 "chat message" 事件时，执行以下回调函数
   socket.on('chat message', function (msg) {
-    console.log('message: ' + msg);
+    console.log('消息: ' + msg);
 
     // 将 "chat message" 事件广播给所有客户端，包括发送这个事件的客户端
-    io.emit('chat message', msg);
+    io.emit('聊天消息', msg);
   });
 
   // 当客户端断开连接时，执行以下回调函数
   socket.on('disconnect', function () {
-    console.log('A user disconnected: ' + socket.id);
+    console.log('用户已断开连接：' + socket.id);
   });
 });
 
 // 启动服务器，监听 3000 端口
 server.listen(PORT, function () {
-  console.log(`Server is listening on *:${PORT}`);
+  console.log(`服务运行在 *:${PORT} 端口`);
 });

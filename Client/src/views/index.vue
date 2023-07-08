@@ -54,7 +54,7 @@ import {io, Socket} from 'socket.io-client'
 // global
 const state = inject<any>("state")
 console.log(state)
-const text = ref('');
+const text = ref<any>('');
 const socket = ref<Socket | null>(null)
 
 const toMsg = () => {
@@ -67,20 +67,18 @@ const toMsg = () => {
 onMounted(() => {
   socket.value = io('http://localhost:33445')
 
-  socket.value.on('connect', () => {
+  socket.value?.on('connect', () => {
     console.log('Connected to the server')
   })
 
-  socket.value.on('chat message', (msg: string) => {
+  socket.value?.on('chat message', (msg: string) => {
     console.log('Received a message: ' + msg)
   })
-
-  socket.value.emit('chat message', 'Hello Server!')
 })
 
 onUnmounted(() => {
   if (socket.value) {
-    socket.value.disconnect()
+    socket.value?.disconnect()
   }
 })
 
