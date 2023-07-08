@@ -8,6 +8,7 @@
     <!--    <div></div>-->
     <!--    <div></div>-->
     <!--    <div></div>-->
+    <!--        <div class="trademark"></div>-->
   </div>
 </template>
 
@@ -24,5 +25,9 @@ defineComponent({
 </script>
 
 <style lang="less" scoped>
-
+.trademark {
+  width: 100px;
+  height: 100px;
+  background: orange;
+}
 </style>

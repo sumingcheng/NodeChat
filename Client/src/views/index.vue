@@ -6,7 +6,6 @@
       </div>
       <div class="right" ref="rightRef">
         <div class="content" :ref="contentHeight">
-          <!--        <div class="trademark"></div>-->
           <div class="message">
             <MessageList :MsgList="MsgList"/>
           </div>
@@ -28,7 +27,6 @@
 </template>
 
 <script setup lang="ts">
-// Socket
 import {nextTick, onMounted, onUnmounted, reactive, ref} from "vue"
 import MessageList from "@/components/messageList/index.vue"
 import UserList from "@/components/userList/index.vue"
@@ -56,10 +54,10 @@ const toMsg = () => {
 // 初始化昵称
 const initName = () => {
   if (username.value) {
-    setSessionStorage('username', username.value)
     ClientData.value.username = username.value
     ClientData.value.type = 'text'
     showModal.value = false
+    setSessionStorage('username', username.value)
   }
 }
 
