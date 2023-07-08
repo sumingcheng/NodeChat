@@ -4,7 +4,7 @@
       <div class="left">
         <UserList/>
       </div>
-      <div class="right">
+      <div class="right" ref="rightRef">
         <div class="content" :ref="contentHeight">
           <!--        <div class="trademark"></div>-->
           <div class="message">
@@ -18,10 +18,10 @@
       <!--          <div>emoji</div>-->
       <!--        </div>-->
       <textarea class="chat-input" placeholder="pleaseEnterContent" v-model="ClientData.message"
-                @keydown.enter="toMsg"/>
+                @keydown.shift.enter="toMsg" @keydown.shift.enter.prevent/>
     </div>
     <Modal v-model:show="showModal">
-      <h2 style="padding-bottom:10px ">请填写的昵称</h2>
+      <h2 style="padding-bottom:10px ">请输入的昵称</h2>
       <input style="width: 80%" v-model="username" @keydown.enter="initName"/>
     </Modal>
   </div>
@@ -34,21 +34,22 @@ import MessageList from "@/components/messageList/index.vue"
 import UserList from "@/components/userList/index.vue"
 import Modal from "@/components/modal/index.vue"
 import {io, Socket} from 'Socket.io-client'
-import {getSessionStorage, setSessionStorage} from "@/utils";
+import {getSessionStorage, setSessionStorage} from "@/utils/index.ts";
 
 const MsgList = reactive<Array<any>>([]);
 const ClientData = ref<any>({});
 const socket = ref<Socket | null>(null)
 const username = ref('')
+let rightRef = ref<null | HTMLDivElement>()
 let showModal = ref(true)
 let contentHeight = ref<any>()
 
 const toMsg = () => {
-  if (ClientData.value.message) {
+  if (ClientData.value.message && ClientData.value.message.length > 0) {
     ClientData.value.message = encodeURIComponent(ClientData.value.message)
-    socket.value?.emit('ServerMessage', (ClientData.value))
+    socket.value?.emit('ServerMessage', ClientData.value)
     // 清空 ClientData 对象
-    ClientData.value.message = ""
+    ClientData.value.message = '';
   }
 }
 
@@ -62,8 +63,10 @@ const initName = () => {
   }
 }
 
-const backToTheBottom = (content: any) => {
-  content.value.scrollTop = content.value;
+const scrollToBottom = () => {
+  if (rightRef.value) {
+    rightRef.value.scrollTop = rightRef.value.scrollHeight;
+  }
 }
 
 onMounted(() => {
@@ -76,7 +79,7 @@ onMounted(() => {
     msgObj.message = decodeURIComponent(msgObj.message)
     MsgList.push(msgObj)
     nextTick(() => {
-      backToTheBottom(contentHeight);
+      scrollToBottom()
     });
   });
 
