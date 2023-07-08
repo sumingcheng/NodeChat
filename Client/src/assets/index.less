@@ -21,12 +21,6 @@
       height: 100%;
       border-left: 1px solid #000;
       overflow-y: auto;
-
-      &::-webkit-scrollbar {
-        width: 0;
-        scrollbar-width: none;
-        -ms-overflow-style: none;
-      }
     }
   }
 }
@@ -34,6 +28,12 @@
 .content {
   padding: 10px;
   white-space: pre-wrap;
+
+  &::-webkit-scrollbar {
+    width: 0;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
 
   .trademark {
     width: 100px;

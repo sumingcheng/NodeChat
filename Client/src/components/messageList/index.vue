@@ -2,10 +2,10 @@
   <div class="List">
     <div v-for="item in MsgList" :key="item.id">
       <div class="msg">
+        <span>{{ item.username + "  " }}</span>
         <span>{{ time(item.timestamp) }}</span>
       </div>
       <div class="content">
-        <span>{{ item.username }}:</span>
         <span>{{ item.message }}</span>
       </div>
     </div>

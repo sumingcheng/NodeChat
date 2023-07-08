@@ -5,7 +5,7 @@
         <UserList/>
       </div>
       <div class="right">
-        <div class="content" ref="contentHeight">
+        <div class="content" :ref="contentHeight">
           <!--        <div class="trademark"></div>-->
           <div class="message">
             <MessageList :MsgList="MsgList"/>
@@ -29,18 +29,19 @@
 
 <script setup lang="ts">
 // Socket
-import {onMounted, onUnmounted, reactive, ref} from "vue"
+import {nextTick, onMounted, onUnmounted, reactive, ref} from "vue"
 import MessageList from "@/components/messageList/index.vue"
 import UserList from "@/components/userList/index.vue"
 import Modal from "@/components/modal/index.vue"
 import {io, Socket} from 'Socket.io-client'
+import {getSessionStorage, setSessionStorage} from "@/utils";
 
 const MsgList = reactive<Array<any>>([]);
 const ClientData = ref<any>({});
 const socket = ref<Socket | null>(null)
 const username = ref('')
 let showModal = ref(true)
-let contentHeight = ref<number>(0)
+let contentHeight = ref<any>()
 
 const toMsg = () => {
   if (ClientData.value.message) {
@@ -51,17 +52,18 @@ const toMsg = () => {
   }
 }
 
+// 初始化昵称
 const initName = () => {
   if (username.value) {
-    showModal.value = false
+    setSessionStorage('username', username.value)
     ClientData.value.username = username.value
     ClientData.value.type = 'text'
+    showModal.value = false
   }
 }
 
 const backToTheBottom = (content: any) => {
-  console.log(content.value.scrollHeight)
-  content.value.scrollTop = content.value.scrollHeight;
+  content.value.scrollTop = content.value;
 }
 
 onMounted(() => {
@@ -69,11 +71,20 @@ onMounted(() => {
   socket.value?.on('connect', () => {
     console.log('已连接到服务器')
   })
+
   socket.value?.on('Client', (msgObj: any) => {
     msgObj.message = decodeURIComponent(msgObj.message)
     MsgList.push(msgObj)
-    backToTheBottom(contentHeight)
+    nextTick(() => {
+      backToTheBottom(contentHeight);
+    });
   });
+
+  // 获取昵称
+  if (getSessionStorage('username')) {
+    ClientData.value.username = getSessionStorage('username')
+    showModal.value = false
+  }
 })
 
 onUnmounted(() => {

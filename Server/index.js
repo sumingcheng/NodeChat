@@ -5,7 +5,6 @@ const Dotenv = require('dotenv')
 Dotenv.config();
 
 const PORT = process.env.PORT
-
 // 创建一个新的 express 应用
 const app = express();
 
@@ -28,8 +27,6 @@ io.on('connection', function (socket) {
 
   // 当客户端发送 "chat message" 事件时，执行以下回调函数
   socket.on('ServerMessage', function (msgObj) {
-    console.log(`消息: ${msgObj.message} 用户名: ${msgObj.username} 用户ID: ${socket.id} 消息类型: ${msgObj.type}`);
-
     // 为消息对象添加一个时间戳
     msgObj.timestamp = Date.now();
     msgObj.id = socket.id
