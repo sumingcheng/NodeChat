@@ -7,7 +7,7 @@ export default defineConfig({
   plugins: [vue()],
   server: {
     open: true,
-    host: '0.0.0.0',
+    host: '127.0.0.1',
     port: 20007,
   },
   resolve: {
