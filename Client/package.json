@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "vue-tsc && vite build",
     "preview": "vite preview --port 20007",
-    "start": "pm2 start --name NodeChatClient20007 npm -- run preview --watch"
+    "start": "pm2 start npm --name NodeChatClient20007 -- run preview --watch"
   },
   "dependencies": {
     "dayjs": "^1.11.9",
