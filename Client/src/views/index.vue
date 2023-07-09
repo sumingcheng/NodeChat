@@ -66,9 +66,10 @@ const scrollToBottom = () => {
     rightRef.value.scrollTop = rightRef.value.scrollHeight;
   }
 }
+const BASE_URL = `http://82.157.118.166:33445`
 
 onMounted(() => {
-  socket.value = io('http://82.157.118.166:33445')
+  socket.value = io(`${BASE_URL}`)
   socket.value?.on('connect', () => {
     console.log('已连接到服务器')
   })

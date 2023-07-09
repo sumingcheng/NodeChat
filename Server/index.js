@@ -41,6 +41,6 @@ io.on('connection', function (socket) {
 });
 
 // 启动服务器，监听 3000 端口
-server.listen(PORT, '82.157.118.166', function () {
-  console.log(`服务运行在 http://82.157.118.166:${PORT} 端口`);
+server.listen(PORT, '127.0.0.1', function () {
+  console.log(`服务运行在 http://127.0.0.1:${PORT} 端口`);
 });
