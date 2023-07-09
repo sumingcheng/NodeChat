@@ -8,6 +8,13 @@ const PORT = process.env.PORT
 // 创建一个新的 express 应用
 const app = express();
 
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*"); // 允许所有来源的请求
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept"); // 允许的请求头字段
+  res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS'); // 允许的 HTTP 方法
+  next();
+});
+
 // 创建一个新的 http 服务器，使用 express 应用
 const server = http.createServer(app);
 const options = {
