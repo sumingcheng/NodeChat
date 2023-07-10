@@ -7,9 +7,9 @@ Dotenv.config();
 const PORT = process.env.PORT
 // 创建一个新的 express 应用
 const app = express();
-
+const allowedOrigin = "http://82.157.118.166";
 app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*"); // 允许所有来源的请求
+  res.header("Access-Control-Allow-Origin", allowedOrigin); // 允许所有来源的请求
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept"); // 允许的请求头字段
   res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS'); // 允许的 HTTP 方法
   next();
@@ -19,7 +19,7 @@ app.use(function (req, res, next) {
 const server = http.createServer(app);
 const options = {
   cors: {
-    origin: '*',
+    origin: allowedOrigin,
     methods: ['GET', 'POST'],
     allowedHeaders: ['my-custom-header'],
     credentials: true
