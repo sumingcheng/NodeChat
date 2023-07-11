@@ -66,7 +66,8 @@ const scrollToBottom = () => {
     rightRef.value.scrollTop = rightRef.value.scrollHeight;
   }
 }
-const BASE_URL = `http://82.157.118.166:33445`
+
+const BASE_URL = import.meta.env.VITE_BASE_URL
 
 onMounted(() => {
   socket.value = io(`${BASE_URL}`)

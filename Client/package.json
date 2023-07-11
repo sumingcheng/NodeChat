@@ -10,6 +10,7 @@
     "start": "pm2 start npm --name NodeChatClient20007 -- run preview"
   },
   "dependencies": {
+    "cross-env": "^7.0.3",
     "dayjs": "^1.11.9",
     "js-cookie": "^3.0.5",
     "socket.io-client": "^4.7.1",

@@ -5,9 +5,12 @@ const Dotenv = require('dotenv')
 Dotenv.config();
 
 const PORT = process.env.PORT
+const BASE_URL = process.env.BASE_URL
+console.log("当前环境为", process.env.NODE_ENV)
 // 创建一个新的 express 应用
 const app = express();
-const allowedOrigin = "http://82.157.118.166";
+const allowedOrigin = ["http://82.157.118.166", "http://127.0.0.1:20007", "http://localhost:20007"];
+
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", allowedOrigin); // 允许所有来源的请求
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept"); // 允许的请求头字段
@@ -48,6 +51,6 @@ io.on('connection', function (socket) {
 });
 
 // 启动服务器，监听 3000 端口
-server.listen(PORT, '0.0.0.0', function () {
-  console.log(`服务运行在 http://0.0.0.0:${PORT} 端口`);
+server.listen(PORT, `${BASE_URL}`, function () {
+  console.log(`服务运行在 http://${BASE_URL}:${PORT} 端口`);
 });
