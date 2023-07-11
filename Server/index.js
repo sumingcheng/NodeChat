@@ -5,8 +5,11 @@ const Dotenv = require('dotenv')
 Dotenv.config();
 
 const PORT = process.env.PORT
-const BASE_URL = process.env.BASE_URL
+let BASE_URL = process.env.BASE_URL
 console.log("当前环境为", process.env.NODE_ENV)
+if (process.env.NODE_ENV === 'production') {
+  BASE_URL = '0.0.0.0'
+}
 // 创建一个新的 express 应用
 const app = express();
 const allowedOrigin = ["http://82.157.118.166", "http://127.0.0.1:20007", "http://localhost:20007"];
