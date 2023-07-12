@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <div class="top">
-      <div class="left">
+      <div class="left" v-show="!isMobile">
         <UserList/>
       </div>
       <div class="right" ref="rightRef">
@@ -19,7 +19,7 @@
       <textarea class="chat-input" placeholder="pleaseEnterContent" v-model="ClientData.message"
                 @keydown.shift.enter="toMsg" @keydown.shift.enter.prevent/>
     </div>
-    <Modal v-model:show="showModal">
+    <Modal v-show="showModal">
       <h2 style="padding-bottom:10px ">请输入的昵称</h2>
       <input style="width: 80%" v-model="username" @keydown.enter="initName"/>
     </Modal>
@@ -32,8 +32,9 @@ import MessageList from "@/components/messageList/index.vue"
 import UserList from "@/components/userList/index.vue"
 import Modal from "@/components/modal/index.vue"
 import {io, Socket} from 'Socket.io-client'
-import {getSessionStorage, setSessionStorage} from "@/utils/index.ts";
+import {getSessionStorage, isMobile, setSessionStorage} from "@/utils/index.ts";
 
+const BASE_URL = import.meta.env.VITE_BASE_URL
 const MsgList = reactive<Array<any>>([]);
 const ClientData = ref<any>({});
 const socket = ref<Socket | null>(null)
@@ -66,8 +67,6 @@ const scrollToBottom = () => {
     rightRef.value.scrollTop = rightRef.value.scrollHeight;
   }
 }
-
-const BASE_URL = import.meta.env.VITE_BASE_URL
 
 onMounted(() => {
   socket.value = io(`${BASE_URL}`)
