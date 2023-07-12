@@ -10,18 +10,16 @@ console.log("当前环境为", process.env.NODE_ENV)
 if (process.env.NODE_ENV === 'production') {
   BASE_URL = '0.0.0.0'
 }
-// 创建一个新的 express 应用
 const app = express();
 const allowedOrigin = ["http://82.157.118.166:20007", "http://127.0.0.1:20007", "http://localhost:20007"];
 
 app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", allowedOrigin); // 允许所有来源的请求
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept"); // 允许的请求头字段
-  res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS'); // 允许的 HTTP 方法
+  res.header("Access-Control-Allow-Origin", allowedOrigin);
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');
   next();
 });
 
-// 创建一个新的 http 服务器，使用 express 应用
 const server = http.createServer(app);
 const options = {
   cors: {
@@ -31,29 +29,41 @@ const options = {
     credentials: true
   }
 }
-// 创建一个新的 Socket.IO 实例，使用 http 服务器
 const io = socketIO(server, options);
 
-// 当有新的客户端连接时，执行以下回调函数
-io.on('connection', function (socket) {
-  console.log('用户已连接: ' + socket.id);
+// 创建在线用户列表
+let onlineUsers = {};
 
-  // 当客户端发送 "chat message" 事件时，执行以下回调函数
+io.on('connection', function (socket) {
+  const username = socket.handshake.query.username;
+
+  // 如果用户名已经存在于在线用户列表中，则断开这个连接
+  if (onlineUsers[username]) {
+    socket.disconnect();
+  } else {
+    onlineUsers[username] = socket.id;
+    console.log(`用户『${username}』已连接: ${socket.id}`);
+    io.emit('onlineUsers', Object.keys(onlineUsers));
+  }
+
   socket.on('ServerMessage', function (msgObj) {
-    // 为消息对象添加一个时间戳
     msgObj.timestamp = Date.now();
-    msgObj.id = socket.id
-    // 将 "Client" 事件广播给所有客户端，包括发送这个事件的客户端
+    msgObj.id = socket.id;
+    msgObj.username = username;
     io.emit('Client', msgObj);
   });
-  
-  // 当客户端断开连接时，执行以下回调函数
+
   socket.on('disconnect', function () {
-    console.log('用户已断开连接：' + socket.id);
+    console.log(`用户${username}已断开连接：${socket.id}`);
+
+    // 从在线用户列表中移除断开连接的用户
+    delete onlineUsers[username];
+
+    // 将更新后的在线用户列表发送给所有连接的客户端
+    io.emit('onlineUsers', Object.keys(onlineUsers));
   });
 });
 
-// 启动服务器，监听 3000 端口
 server.listen(PORT, `${BASE_URL}`, function () {
   console.log(`服务运行在 http://${BASE_URL}:${PORT} 端口`);
 });

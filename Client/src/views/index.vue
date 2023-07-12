@@ -63,7 +63,26 @@ const initName = () => {
     ClientData.value.type = 'text'
     showModal.value = false
     setSessionStorage('username', username.value)
+    initConnect()
   }
+}
+
+// 建立连接
+const initConnect = () => {
+  const username = getSessionStorage('username');
+  socket.value = io(`${BASE_URL}`, {query: {username: username}})
+
+  socket.value?.on('connect', () => {
+    console.log('已连接到服务器')
+  })
+
+  socket.value?.on('Client', (msgObj: any) => {
+    msgObj.message = decodeURIComponent(msgObj.message)
+    MsgList.push(msgObj)
+    nextTick(() => {
+      scrollToBottom()
+    });
+  });
 }
 
 // 随机昵称
@@ -78,23 +97,12 @@ const scrollToBottom = () => {
 }
 
 onMounted(() => {
-  socket.value = io(`${BASE_URL}`)
-  socket.value?.on('connect', () => {
-    console.log('已连接到服务器')
-  })
-
-  socket.value?.on('Client', (msgObj: any) => {
-    msgObj.message = decodeURIComponent(msgObj.message)
-    MsgList.push(msgObj)
-    nextTick(() => {
-      scrollToBottom()
-    });
-  });
-
   // 获取昵称
-  if (getSessionStorage('username')) {
-    ClientData.value.username = getSessionStorage('username')
-    showModal.value = false
+  if (username.value) {
+    ClientData.value.username = username;
+    showModal.value = false;
+  } else {
+    showModal.value = true;
   }
 })
 

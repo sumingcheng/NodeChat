@@ -1,6 +1,6 @@
 <template>
   <div class="userList">
-    <div class="title" style="margin-top: 5px">欢迎来到SMC聊天室</div>
+    <div class="title" style="margin-top: 5px">Welcome ChatRoom</div>
     <div class="content">{{ formattedTime }}</div>
     <div class="title">在线总人数</div>
     <div class="content">81人</div>
