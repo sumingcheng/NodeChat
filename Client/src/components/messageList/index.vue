@@ -14,7 +14,7 @@
 
 <script setup lang="ts">
 import {defineComponent} from 'vue'
-import dayjs from 'dayjs'
+import {time} from "@/utils";
 
 defineProps({
   MsgList: {
@@ -27,9 +27,7 @@ defineComponent({
   name: 'messageList',
 })
 
-const time = (val: number | string) => {
-  return dayjs(val).format('YYYY-MM-DD HH:mm:ss');
-}
+
 
 </script>
 

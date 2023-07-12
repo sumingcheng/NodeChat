@@ -46,7 +46,7 @@ io.on('connection', function (socket) {
     // 将 "Client" 事件广播给所有客户端，包括发送这个事件的客户端
     io.emit('Client', msgObj);
   });
-
+  
   // 当客户端断开连接时，执行以下回调函数
   socket.on('disconnect', function () {
     console.log('用户已断开连接：' + socket.id);

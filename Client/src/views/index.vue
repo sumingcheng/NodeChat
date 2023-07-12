@@ -16,8 +16,8 @@
       <!--        <div class="tools">-->
       <!--          <div>emoji</div>-->
       <!--        </div>-->
-      <textarea class="chat-input" placeholder="SHIFT+ENTER 发送消息" v-model="ClientData.message"
-                @keydown.shift.enter="toMsg" @keydown.shift.enter.prevent/>
+      <textarea class="chat-input" placeholder="ENTER 发送消息" v-model="ClientData.message"
+                @keydown.enter="toMsg" @keydown.enter.prevent/>
     </div>
     <Modal :show="showModal">
       <h2 style="padding-bottom:10px ">请输入的昵称</h2>

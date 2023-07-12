@@ -1,7 +1,7 @@
 <template>
   <div class="userList">
-    <div class="title" style="margin-top: 5px">服务器时间</div>
-    <div class="content">2023年7月12日 09:27:57</div>
+    <div class="title" style="margin-top: 5px">欢迎来到SMC聊天室</div>
+    <div class="content">{{ formattedTime }}</div>
     <div class="title">在线总人数</div>
     <div class="content">81人</div>
     <div class="title">当前在线用户</div>
@@ -45,7 +45,20 @@
 </template>
 
 <script setup lang="ts">
-import {defineComponent} from 'vue'
+import {computed, defineComponent, onMounted, ref} from 'vue'
+import {time} from "@/utils";
+
+const currentTime = ref(new Date().getTime());
+
+const formattedTime = computed(() => {
+  return time(currentTime.value); // 根据本地化格式将时间转换为字符串
+});
+
+onMounted(() => {
+  setInterval(() => {
+    currentTime.value = new Date().getTime();
+  }, 1000); // 每秒钟更新一次时间
+});
 
 defineComponent({
   name: 'userList',
@@ -54,6 +67,8 @@ defineComponent({
     time: Number
   }
 })
+
+
 </script>
 
 <style lang="less" scoped>
