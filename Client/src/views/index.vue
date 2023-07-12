@@ -19,9 +19,13 @@
       <textarea class="chat-input" placeholder="SHIFT+ENTER 发送消息" v-model="ClientData.message"
                 @keydown.shift.enter="toMsg" @keydown.shift.enter.prevent/>
     </div>
-    <Modal v-show="showModal">
+    <Modal :show="showModal">
       <h2 style="padding-bottom:10px ">请输入的昵称</h2>
-      <input style="width: 80%" v-model="username" @keydown.enter="initName"/>
+      <input class="MoInput" v-model="username" @keydown.enter="initName"/>
+      <div class="randomName">想不出？
+        <button @click="randomName">随机一个</button>
+        <button @click="initName">确定</button>
+      </div>
     </Modal>
   </div>
 </template>
@@ -32,7 +36,7 @@ import MessageList from "@/components/messageList/index.vue"
 import UserList from "@/components/userList/index.vue"
 import Modal from "@/components/modal/index.vue"
 import {io, Socket} from 'Socket.io-client'
-import {getSessionStorage, isMobile, setSessionStorage} from "@/utils/index.ts";
+import {generateNickname, getSessionStorage, isMobile, setSessionStorage} from "@/utils/index.ts";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL
 const MsgList = reactive<Array<any>>([]);
@@ -60,6 +64,11 @@ const initName = () => {
     showModal.value = false
     setSessionStorage('username', username.value)
   }
+}
+
+// 随机昵称
+const randomName = () => {
+  username.value = generateNickname()
 }
 
 const scrollToBottom = () => {
