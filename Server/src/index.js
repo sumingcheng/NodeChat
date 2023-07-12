@@ -5,12 +5,16 @@ const Dotenv = require('dotenv')
 const {findUserName, replaceUser} = require('./utils');
 Dotenv.config();
 
-const PORT = process.env.PORT
-let BASE_URL = process.env.BASE_URL
-console.log("当前环境为", process.env.NODE_ENV)
+let BASE_URL, PORT
 if (process.env.NODE_ENV === 'production') {
+  PORT = 33445
   BASE_URL = '0.0.0.0'
+} else {
+  PORT = 33445
+  BASE_URL = "127.0.0.1"
 }
+console.log("当前环境为", process.env.NODE_ENV)
+
 const app = express();
 const allowedOrigin = ["http://82.157.118.166:20007", "http://127.0.0.1:20007", "http://localhost:20007"];
 
@@ -30,8 +34,8 @@ const options = {
     credentials: true
   }
 }
-const io = socketIO(server, options);
 
+const io = socketIO(server, options);
 // 创建在线用户列表
 let onlineUsers = [];
 
