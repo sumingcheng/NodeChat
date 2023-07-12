@@ -2,6 +2,7 @@ const express = require('express');
 const http = require('http');
 const socketIO = require('socket.io');
 const Dotenv = require('dotenv')
+const {findUserName, replaceUser} = require('./utils');
 Dotenv.config();
 
 const PORT = process.env.PORT
@@ -32,19 +33,23 @@ const options = {
 const io = socketIO(server, options);
 
 // 创建在线用户列表
-let onlineUsers = {};
+let onlineUsers = [];
 
 io.on('connection', function (socket) {
   const username = socket.handshake.query.username;
-
-  // 如果用户名已经存在于在线用户列表中，则断开这个连接
-  if (onlineUsers[username]) {
-    socket.disconnect();
-  } else {
-    onlineUsers[username] = socket.id;
-    console.log(`用户『${username}』已连接: ${socket.id}`);
-    io.emit('onlineUsers', Object.keys(onlineUsers));
+  let newUser = {
+    username: username,
+    id: socket.id
   }
+  // 如果用户名已经存在于在线用户列表中，则断开这个连接
+  if (findUserName(onlineUsers, username)) {
+    replaceUser(onlineUsers, newUser)
+  } else {
+    onlineUsers.push(newUser);
+  }
+
+  console.log(`用户『${username}』已连接: ${socket.id}`);
+  io.emit('onlineUsers', onlineUsers);
 
   socket.on('ServerMessage', function (msgObj) {
     msgObj.timestamp = Date.now();
@@ -57,10 +62,10 @@ io.on('connection', function (socket) {
     console.log(`用户${username}已断开连接：${socket.id}`);
 
     // 从在线用户列表中移除断开连接的用户
-    delete onlineUsers[username];
+    onlineUsers = onlineUsers.filter(user => user.id !== socket.id);
 
     // 将更新后的在线用户列表发送给所有连接的客户端
-    io.emit('onlineUsers', Object.keys(onlineUsers));
+    io.emit('onlineUsers', onlineUsers);
   });
 });
 

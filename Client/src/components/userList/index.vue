@@ -3,43 +3,10 @@
     <div class="title" style="margin-top: 5px">Welcome ChatRoom</div>
     <div class="content">{{ formattedTime }}</div>
     <div class="title">在线总人数</div>
-    <div class="content">81人</div>
+    <div class="content">{{ UserListData.length }}人</div>
     <div class="title">当前在线用户</div>
     <div class="list">
-      <div>昵称</div>
-      <div>昵称</div>
-      <div>昵称</div>
-      <div>昵称</div>
-      <div>昵称</div>
-      <div>昵称</div>
-      <div>昵称</div>
-      <div>昵称</div>
-      <div>昵称</div>
-      <div>昵称</div>
-      <div>昵称</div>
-      <div>昵称</div>
-      <div>昵称</div>
-      <div>昵称</div>
-      <div>昵称</div>
-      <div>昵称</div>
-      <div>昵称</div>
-      <div>昵称</div>
-      <div>昵称</div>
-      <div>昵称</div>
-      <div>昵称</div>
-      <div>昵称</div>
-      <div>昵称</div>
-      <div>昵称</div>
-      <div>昵称</div>
-      <div>昵称</div>
-      <div>昵称</div>
-      <div>昵称</div>
-      <div>昵称</div>
-      <div>昵称</div>
-      <div>昵称</div>
-      <div>昵称</div>
-      <div>昵称</div>
-      <div>昵称</div>
+      <div v-for="item in UserListData" :key="item.id">{{ item.username }}</div>
     </div>
   </div>
 </template>
@@ -62,9 +29,12 @@ onMounted(() => {
 
 defineComponent({
   name: 'userList',
-  props: {
-    msg: String,
-    time: Number
+})
+
+defineProps({
+  UserListData: {
+    type: Array,
+    default: () => []
   }
 })
 

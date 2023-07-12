@@ -2,10 +2,10 @@
   "name": "nodechat",
   "version": "1.0.0",
   "description": "node聊天室",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development nodemon index.js",
-    "prod": "cross-env NODE_ENV=production nodemon index.js",
+    "dev": "cross-env NODE_ENV=development nodemon src/index.js",
+    "prod": "cross-env NODE_ENV=production nodemon src/index.js",
     "start": "pm2 start --name NodeChatServer33445 npm -- run prod"
   },
   "keywords": [],

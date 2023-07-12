@@ -2,7 +2,7 @@
   <div class="main">
     <div class="top">
       <div class="left" v-show="!isMobile">
-        <UserList/>
+        <UserList :UserListData="UserListData"/>
       </div>
       <div class="right" ref="rightRef">
         <div class="content" :ref="contentHeight">
@@ -36,13 +36,15 @@ import MessageList from "@/components/messageList/index.vue"
 import UserList from "@/components/userList/index.vue"
 import Modal from "@/components/modal/index.vue"
 import {io, Socket} from 'Socket.io-client'
-import {generateNickname, getlocalStorage, isMobile, setlocalStorage} from "@/utils/index.ts";
+import {generateNickname, getLocalStorage, isMobile, setLocalStorage} from "@/utils/index.ts";
+import {User} from "@/views/type.ts";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL
 const MsgList = reactive<Array<any>>([]);
 const ClientData = ref<any>({});
 const socket = ref<Socket | null>(null)
 const username = ref('')
+let UserListData = reactive([] as User[])
 let rightRef = ref<null | HTMLDivElement>()
 let showModal = ref(true)
 let contentHeight = ref<any>()
@@ -62,19 +64,25 @@ const initName = () => {
     ClientData.value.username = username.value
     ClientData.value.type = 'text'
     showModal.value = false
-    setlocalStorage('username', username.value)
+    setLocalStorage('username', username.value)
     initConnect()
   }
 }
 
 // 建立连接
 const initConnect = () => {
-  const username = getlocalStorage('username');
+  const username = getLocalStorage('username');
   socket.value = io(`${BASE_URL}`, {query: {username: username}})
 
   socket.value?.on('connect', () => {
     console.log('已连接到服务器')
   })
+
+  socket.value.on('onlineUsers', (onlineUsers) => {
+    if (Array.isArray(onlineUsers) && onlineUsers.length > 0) {
+      UserListData.splice(0, UserListData.length, ...onlineUsers);
+    }
+  });
 
   socket.value?.on('disconnect', () => {
     reconnect()
@@ -98,7 +106,10 @@ const disconnect = () => {
 
 //重新连接
 const reconnect = () => {
-  initConnect()
+  const st = setTimeout(() => {
+    initConnect()
+  }, 1000)
+  clearTimeout(st)
 }
 
 // 随机昵称
@@ -114,7 +125,7 @@ const scrollToBottom = () => {
 
 onMounted(() => {
   // 获取昵称
-  if (getlocalStorage('username')) {
+  if (getLocalStorage('username')) {
     ClientData.value.username = username;
     showModal.value = false;
     initConnect()
