@@ -36,7 +36,7 @@ import MessageList from "@/components/messageList/index.vue"
 import UserList from "@/components/userList/index.vue"
 import Modal from "@/components/modal/index.vue"
 import {io, Socket} from 'Socket.io-client'
-import {generateNickname, getSessionStorage, isMobile, setSessionStorage} from "@/utils/index.ts";
+import {generateNickname, getlocalStorage, isMobile, setlocalStorage} from "@/utils/index.ts";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL
 const MsgList = reactive<Array<any>>([]);
@@ -62,18 +62,22 @@ const initName = () => {
     ClientData.value.username = username.value
     ClientData.value.type = 'text'
     showModal.value = false
-    setSessionStorage('username', username.value)
+    setlocalStorage('username', username.value)
     initConnect()
   }
 }
 
 // 建立连接
 const initConnect = () => {
-  const username = getSessionStorage('username');
+  const username = getlocalStorage('username');
   socket.value = io(`${BASE_URL}`, {query: {username: username}})
 
   socket.value?.on('connect', () => {
     console.log('已连接到服务器')
+  })
+
+  socket.value?.on('disconnect', () => {
+    reconnect()
   })
 
   socket.value?.on('Client', (msgObj: any) => {
@@ -83,6 +87,18 @@ const initConnect = () => {
       scrollToBottom()
     });
   });
+}
+
+// 断开连接
+const disconnect = () => {
+  if (socket.value) {
+    socket.value.disconnect()
+  }
+}
+
+//重新连接
+const reconnect = () => {
+  initConnect()
 }
 
 // 随机昵称
@@ -98,18 +114,17 @@ const scrollToBottom = () => {
 
 onMounted(() => {
   // 获取昵称
-  if (username.value) {
+  if (getlocalStorage('username')) {
     ClientData.value.username = username;
     showModal.value = false;
+    initConnect()
   } else {
     showModal.value = true;
   }
 })
 
 onUnmounted(() => {
-  if (socket.value) {
-    socket.value?.disconnect()
-  }
+  disconnect()  // 在组件卸载时断开连接
 })
 
 </script>
