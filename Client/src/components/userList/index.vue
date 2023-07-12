@@ -14,6 +14,7 @@
 <script setup lang="ts">
 import {computed, defineComponent, onMounted, ref} from 'vue'
 import {time} from "@/utils";
+import {User} from "@/views/type.ts";
 
 const currentTime = ref(new Date().getTime());
 
@@ -33,7 +34,7 @@ defineComponent({
 
 defineProps({
   UserListData: {
-    type: Array,
+    type: Array as () => User[],
     default: () => []
   }
 })
