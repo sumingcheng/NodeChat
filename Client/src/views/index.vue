@@ -16,7 +16,7 @@
       <!--        <div class="tools">-->
       <!--          <div>emoji</div>-->
       <!--        </div>-->
-      <textarea class="chat-input" placeholder="pleaseEnterContent" v-model="ClientData.message"
+      <textarea class="chat-input" placeholder="SHIFT+ENTER 发送消息" v-model="ClientData.message"
                 @keydown.shift.enter="toMsg" @keydown.shift.enter.prevent/>
     </div>
     <Modal v-show="showModal">
