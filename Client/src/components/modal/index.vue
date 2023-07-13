@@ -1,7 +1,6 @@
 <template>
   <div v-if="show" class="modal">
     <div class="modal-content">
-      <span class="close" @click="close">&times;</span>
       <slot></slot>
     </div>
   </div>
@@ -12,14 +11,6 @@
 defineProps({
   show: Boolean,
 })
-
-// 定义发出的事件
-const emit = defineEmits(['update:show'])
-
-// 定义关闭模态框的方法
-const close = () => {
-  emit('update:show', false)
-}
 </script>
 
 <style scoped lang="less">

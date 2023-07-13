@@ -2,6 +2,11 @@
   <div class="userList">
     <div class="title" style="margin-top: 5px">Welcome ChatRoom</div>
     <div class="content">{{ formattedTime }}</div>
+    <div class="title">当前昵称</div>
+    <div class="editNickName">
+      <div class="content">{{ nickname || "未输入" }}</div>
+      <button @click="editNickName">修改昵称</button>
+    </div>
     <div class="title">在线总人数</div>
     <div class="content">{{ UserListData.length }}人</div>
     <div class="title">当前在线用户</div>
@@ -28,6 +33,12 @@ onMounted(() => {
   }, 1000); // 每秒钟更新一次时间
 });
 
+const emit = defineEmits(['update:editNickName'])
+
+const editNickName = () => {
+  emit('update:editNickName');
+}
+
 defineComponent({
   name: 'userList',
 })
@@ -36,10 +47,12 @@ defineProps({
   UserListData: {
     type: Array as () => User[],
     default: () => []
+  },
+  nickname: {
+    type: String,
+    default: ''
   }
 })
-
-
 </script>
 
 <style lang="less" scoped>
@@ -47,6 +60,20 @@ defineProps({
   overflow-x: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+
+  .editNickName {
+    position: relative;
+
+    button {
+      position: absolute;
+      cursor: pointer;
+      border-radius: 5px;
+      padding: 1px 4px;
+      margin-right: 10px;
+      left: 60px;
+      top: 0;
+    }
+  }
 
   .title {
     font-size: 20px;

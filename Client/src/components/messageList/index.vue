@@ -26,9 +26,6 @@ defineProps({
 defineComponent({
   name: 'messageList',
 })
-
-
-
 </script>
 
 <style lang="less" scoped>

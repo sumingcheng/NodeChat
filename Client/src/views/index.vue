@@ -2,7 +2,7 @@
   <div class="main">
     <div class="top">
       <div class="left" v-show="!isMobile">
-        <UserList :UserListData="UserListData"/>
+        <UserList :UserListData="UserListData" @update:editNickName="editNickName" :nickname="nickname"/>
       </div>
       <div class="right" ref="rightRef">
         <div class="content" :ref="contentHeight">
@@ -48,6 +48,7 @@ let UserListData = reactive([] as User[])
 let rightRef = ref<null | HTMLDivElement>()
 let showModal = ref(true)
 let contentHeight = ref<any>()
+let nickname = ref('')
 
 const toMsg = () => {
   if (ClientData.value.message && ClientData.value.message.length > 0) {
@@ -62,11 +63,16 @@ const toMsg = () => {
 const initName = () => {
   if (username.value) {
     ClientData.value.username = username.value
+    nickname.value = username.value
     ClientData.value.type = 'text'
     showModal.value = false
     setLocalStorage('username', username.value)
     initConnect()
   }
+}
+
+const editNickName = () => {
+  showModal.value = !showModal.value
 }
 
 // 建立连接
