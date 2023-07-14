@@ -20,6 +20,7 @@
                 @keydown.enter="toMsg" @keydown.enter.prevent/>
     </div>
     <Modal :show="showModal">
+      <span class="close" @click="showModal=false">&times;</span>
       <h2 style="padding-bottom:10px ">请输入的昵称</h2>
       <input class="MoInput" v-model="username" @keydown.enter="initName"/>
       <div class="randomName">想不出？
@@ -100,8 +101,22 @@ const initConnect = () => {
     MsgList.push(msgObj)
     nextTick(() => {
       scrollToBottom()
+      titleFlash()
     });
   });
+}
+
+// 标题栏闪烁
+const titleFlash = () => {
+  let title = document.title;
+  let timer: any = null;
+  timer = setInterval(() => {
+    document.title = document.title == '【】' ? '【你有新消息】' : '【】';
+  }, 500);
+  window.onfocus = () => {
+    clearInterval(timer);
+    document.title = title;
+  }
 }
 
 // 断开连接
@@ -131,9 +146,11 @@ const scrollToBottom = () => {
 }
 
 onMounted(() => {
+  let LocalName = getLocalStorage('username')
   // 获取昵称
-  if (getLocalStorage('username')) {
-    ClientData.value.username = username;
+  if (LocalName) {
+    ClientData.value.username = LocalName;
+    nickname.value = LocalName;
     showModal.value = false;
     initConnect()
   } else {

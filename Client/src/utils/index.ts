@@ -1,9 +1,9 @@
 export function getLocalStorage(key: string) {
-  return sessionStorage.getItem(key);
+  return localStorage.getItem(key);
 }
 
 export function setLocalStorage(key: string, value: string) {
-  sessionStorage.setItem(key, value);
+  localStorage.setItem(key, value);
 }
 
 export const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
