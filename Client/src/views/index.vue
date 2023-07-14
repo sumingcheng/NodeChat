@@ -85,7 +85,7 @@ const initConnect = () => {
     console.log('已连接到服务器')
   })
 
-  socket.value.on('onlineUsers', (onlineUsers) => {
+  socket.value.on('onlineUsers', (onlineUsers: Array<any>) => {
     if (Array.isArray(onlineUsers) && onlineUsers.length > 0) {
       UserListData.splice(0, UserListData.length, ...onlineUsers);
     }
