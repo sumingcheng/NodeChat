@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc && vite build",
-    "preview": "vite preview --port 20007",
+    "preview": "npm run build && vite preview --port 20007",
     "start": "pm2 start npm --name NodeChatClient20007 -- run preview"
   },
   "dependencies": {
