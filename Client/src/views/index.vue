@@ -35,7 +35,7 @@ import {nextTick, onMounted, onUnmounted, reactive, ref} from "vue"
 import MessageList from "@/components/messageList/index.vue"
 import UserList from "@/components/userList/index.vue"
 import Modal from "@/components/modal/index.vue"
-import {io, Socket} from 'Socket.io-client'
+import {io, Socket} from 'socket.io-client'
 import {generateNickname, getLocalStorage, isMobile, setLocalStorage} from "@/utils/index.ts";
 import {User} from "@/views/type.ts";
 
