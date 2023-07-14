@@ -1,9 +1,7 @@
 const express = require('express');
 const http = require('http');
 const socketIO = require('socket.io');
-const Dotenv = require('dotenv')
 const {findUserName, replaceUser} = require('./utils');
-Dotenv.config();
 
 let BASE_URL, PORT
 if (process.env.NODE_ENV === 'production') {

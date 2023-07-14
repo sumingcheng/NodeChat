@@ -67,6 +67,7 @@ const initName = () => {
     ClientData.value.type = 'text'
     showModal.value = false
     setLocalStorage('username', username.value)
+    disconnect()
     initConnect()
   }
 }
