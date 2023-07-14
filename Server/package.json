@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon src/index.js",
     "prod": "cross-env NODE_ENV=production nodemon src/index.js",
-    "start": "pm2 start --name NodeChatServer33445 npm -- run prod"
+    "pm2": "pm2 start --name NodeChatServer33445 npm -- run prod"
   },
   "keywords": [],
   "author": "",
