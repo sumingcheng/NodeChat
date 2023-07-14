@@ -50,6 +50,7 @@ let rightRef = ref<null | HTMLDivElement>()
 let showModal = ref(true)
 let contentHeight = ref<any>()
 let nickname = ref('')
+let isLeave = ref(false)
 
 const toMsg = () => {
   if (ClientData.value.message && ClientData.value.message.length > 0) {
@@ -99,24 +100,19 @@ const initConnect = () => {
   socket.value?.on('Client', (msgObj: any) => {
     msgObj.message = decodeURIComponent(msgObj.message)
     MsgList.push(msgObj)
+    if (isLeave.value) {
+      titleFlash()
+    }
     nextTick(() => {
       scrollToBottom()
-      titleFlash()
     });
   });
 }
 
 // 标题栏闪烁
 const titleFlash = () => {
-  let title = document.title;
-  let timer: any = null;
-  timer = setInterval(() => {
-    document.title = document.title == '【】' ? '【你有新消息】' : '【】';
-  }, 500);
-  window.onfocus = () => {
-    clearInterval(timer);
-    document.title = title;
-  }
+  document.title = '💬有新的消息等待您的回复！';
+  console.log('闪烁')
 }
 
 // 断开连接
@@ -155,6 +151,18 @@ onMounted(() => {
     initConnect()
   } else {
     showModal.value = true;
+  }
+
+  window.onblur = function () {
+    isLeave.value = true
+    document.title = '🚀您的应用正在等待您的返回';
+    console.log('离开')
+  }
+
+  window.onfocus = function () {
+    isLeave.value = false
+    document.title = 'SMC ChatRoom';
+    console.log('回来')
   }
 })
 
